@@ -8,7 +8,7 @@ Usage:
 from setuptools import setup
 
 APP = ['game.py']
-DATA_FILES = [ ('', ["images"]) ]
+DATA_FILES = [ ('', ["images"]), ('', ["sounds"]) ]
 OPTIONS = {}
 
 setup(
