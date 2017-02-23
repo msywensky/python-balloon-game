@@ -21,4 +21,5 @@ person: http://opengameart.org/content/boy-with-a-slingshot - Software Atelier K
 balloon: Ripped from Kirby Mass Attack, Nintendo DS - http://drshnaps.com 
 background music: http://opengameart.org/content/carnival-rides 
 pop sound: http://opengameart.org/content/bubbles-pop 
+icon: https://icons8.com/web-app/26145/Party-Baloon
 

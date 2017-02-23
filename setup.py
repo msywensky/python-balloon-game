@@ -9,7 +9,19 @@ from setuptools import setup
 
 APP = ['game.py']
 DATA_FILES = [ ('', ["images"]), ('', ["sounds"]) ]
-OPTIONS = {}
+OPTIONS = {
+    'argv_emulation': True,
+    'iconfile': 'icon.icns',
+    'plist': {
+        'CFBundleName': "Balloon Pop",
+        'CFBundleDisplayName': "Balloon Pop",
+        'CFBundleGetInfoString': "Balloon pop app in Python",
+        'CFBundleIdentifier': "com.mwsywensky.osx.balloonpop",
+        'CFBundleVersion': "0.1.0",
+        'CFBundleShortVersionString': "0.1.0",
+        'NSHumanReadableCopyright': u"MIT"
+    }
+}
 
 setup(
     app=APP,
