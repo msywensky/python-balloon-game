@@ -9,10 +9,10 @@ To run from source:
 * install homebrew (if you do not have it):https://brew.sh/ 
 * install Python 2.7.x.  Yes, OSX comes with Python but there are issues with it and PyGame: $ brew python
 * install PyGame dependencies.  This was a pain to get right on Sierra. They could probably go all on one line, but I split them out.
-* * Mercurial: $ brew install mercurial
-* * sdl libraries: $ brew install sdl sdl_image 
-* * $ brew install sdl_mixer --with-libvorbis
-* * $ brew install sdl_ttf portmidi
+    * Mercurial: $ brew install mercurial
+    * sdl libraries: $ brew install sdl sdl_image 
+    * $ brew install sdl_mixer --with-libvorbis
+    * $ brew install sdl_ttf portmidi
 * install PyGame: pip install hg+http://bitbucket.org/pygame/pygame
 
 Attributions:
