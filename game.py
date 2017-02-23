@@ -3,21 +3,23 @@ import sys
 from os import path
 from person import Person
 from movingitems import Rock, Balloon
-from pygame.locals import Color, KEYUP, KEYDOWN, K_ESCAPE, \
+from pygame.locals import Color, KEYUP, KEYDOWN, K_ESCAPE, K_s,\
     K_LEFT, K_RIGHT, K_UP, K_DOWN, K_SPACE, K_RETURN
 
 class Game(object):
     
     def __init__(self):
-        self.screen_width = 640
+        self.screen_width = 800
         self.screen_height = 480
         self.initial_angle = 30
-        self.frames_per_second = 30
+        self.frames_per_second = 60
         self.wind = 0
         self.white = Color("white")
         self.red = Color("red")
         self.background = pg.image.load(path.join('images','bg_cropped.png'))
         self.show_instructions = True
+        self.sound_on = True
+        self.game_over = False
 
     def load_sounds(self):
         if not pg.mixer or not pg.mixer.get_init():
@@ -35,7 +37,7 @@ class Game(object):
         return self.sound_supported
 
     def play_music(self):
-        if self.sound_supported:
+        if self.sound_supported and self.sound_on and not (self.game_over or self.show_instructions):
             pg.mixer.music.play(-1)
 
     def stop_music(self):
@@ -43,8 +45,16 @@ class Game(object):
             pg.mixer.music.stop()
 
     def play_bubble_pop(self):
-        if self.sound_supported:
+        if self.sound_supported and self.sound_on:
             self.sound_pop.play()
+
+    def toggle_sound(self):
+        if self.sound_on:
+            self.sound_on = False
+            self.stop_music()
+        else:
+            self.sound_on = True
+            self.play_music()
 
     def new_game(self):
         self.rocks = []
@@ -54,7 +64,8 @@ class Game(object):
         self.person = Person(self.screen, (self.screen_width / 3, self.screen_height - 65), self.initial_angle)
         self.score = 0
         self.new_balloon_count = 2
-        self.generate_balloons(self.new_balloon_count)        
+        self.generate_balloons(self.new_balloon_count) 
+        self.play_music()       
 
     def write_text(self, text, x, y, color):
         label = self.font.render(text, 0, color)
@@ -74,6 +85,8 @@ class Game(object):
         y+=lf
         self.write_text("Up/down keys to change angle", x, y, color)
         y+=lf
+        self.write_text("Press S to toggle sound", x, y, color)
+        y+=lf
         self.write_text("Press enter when ready", x-indent, y, color)
         
 
@@ -85,10 +98,16 @@ class Game(object):
             self.write_text("Score: %s" % self.score, 50, 120, self.white)
             if self.game_over:
                 self.write_text("Game Over - Press enter to play again", 100, 200, self.red)
+        if not self.sound_on:
+            self.write_text("sound off", self.screen_width / 2 - 4, 50 , Color("blue"))
 
     def generate_balloons(self,num):
+        xLow = self.screen_width / 2
+        xHigh = self.screen_width - 20
+        yLow = self.screen_height - 100
+        yHigh = self.screen_height - 50
         for i in range(num):
-            self.balloons.append(Balloon(self.screen, 300, 600, self.screen_height - 50, self.screen_height - 20))
+            self.balloons.append(Balloon(self.screen, xLow, xHigh, yLow, yHigh))
 
     def add_rock(self, velocity):
         rock_x = self.person.x + 32
@@ -136,6 +155,9 @@ class Game(object):
                         self.person.aim()
 
                 if e.type == KEYUP:
+                    if e.key == K_s:
+                        self.toggle_sound()
+
                     if e.key == K_SPACE and is_playing:
                         release_slingshot = True
 
@@ -164,7 +186,7 @@ class Game(object):
                     self.person.decrease_angle(2)
 
                 if keys[K_SPACE]:
-                    new_rock_velocity += 3
+                    new_rock_velocity += 1.5
 
             
                 for balloon in self.balloons:
@@ -175,6 +197,7 @@ class Game(object):
                         if balloon.is_offscreen():
                             self.game_over = True
                             is_playing = False
+                            self.stop_music()
 
                 if is_playing:
                     for rock in self.rocks:

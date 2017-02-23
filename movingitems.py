@@ -37,7 +37,7 @@ class MovingItem(object):
         self.time = 0.0
 
     def update(self, wind):
-        self.time += .2
+        self.time += .05
 
         self.x += (self.xVelocity * self.time) + (.5 * (wind / 5.0) * self.time ** 2)
         self.y += ((-1.0 * (self.yVelocity * self.time)) + (.5 * self.gravity * (self.time ** 2))) 
@@ -49,12 +49,12 @@ class MovingItem(object):
 class Balloon(MovingItem):
 
     def __init__(self, screen, xLow, xHigh, yLow, yHigh):
-        velocity = random.randrange(10,40,1) / 1000.0
+        velocity = random.randrange(30,60,1) / 1000.0
         x = random.randint(xLow,xHigh)
         y = random.randint(yLow, yHigh)
         image = get_balloon_image()
         angle = 90
-        gravity = 0.0001
+        gravity = 0.0005
         super(Balloon, self).__init__(screen, (x,y),image, angle, velocity, gravity)
 
     def is_offscreen(self):
@@ -77,7 +77,7 @@ class Rock(MovingItem):
         image = pg.image.load(path.join('images','stone.png'))
         gravity_of_earth = 9.8
         super(Rock, self).__init__(screen, (x,y),image, angle, velocity, gravity_of_earth)
-
+        self.time = 0.2
     def hit_balloon(self,balloons):
         for balloon in balloons:
             if balloon.is_hit(self.x,self.y):
